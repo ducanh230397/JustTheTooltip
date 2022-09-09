@@ -235,20 +235,20 @@ class _JustTheTooltipOverlayState extends _JustTheTooltipState<OverlayEntry> {
     }
   }
 
-  // @override
-  // void didUpdateWidget(covariant JustTheTooltip oldWidget) {
-  //   super.didUpdateWidget(oldWidget);
+// @override
+// void didUpdateWidget(covariant JustTheTooltip oldWidget) {
+//   super.didUpdateWidget(oldWidget);
 
-  //   // This adds a post frame callback because otherwise the OverlayEntry
-  //   // builder would run before the widget has a chance to update with the
-  //   // newest config.
-  //   WidgetsBinding.instance?.addPostFrameCallback((_) {
-  //     if (mounted) {
-  //       entry?.markNeedsBuild();
-  //       skrim?.markNeedsBuild();
-  //     }
-  //   });
-  // }
+//   // This adds a post frame callback because otherwise the OverlayEntry
+//   // builder would run before the widget has a chance to update with the
+//   // newest config.
+//   WidgetsBinding.instance?.addPostFrameCallback((_) {
+//     if (mounted) {
+//       entry?.markNeedsBuild();
+//       skrim?.markNeedsBuild();
+//     }
+//   });
+// }
 }
 
 /// This is almost a one to one mapping to [Tooltip]'s [_TooltipState] except
@@ -563,6 +563,8 @@ abstract class _JustTheTooltipState<T> extends State<JustTheInterface>
 
   Future<void> _handlePress() async {
     _pressActivated = true;
+    print("%%%%%%%%%%%%%: handle");
+
     final tooltipCreated = await ensureTooltipVisible();
 
     if (tooltipCreated && enableFeedback) {
@@ -572,12 +574,14 @@ abstract class _JustTheTooltipState<T> extends State<JustTheInterface>
         Feedback.forTap(context);
       }
     }
-    if(_controller.value == TooltipStatus.isHidden){
-      _controller.showTooltip();
-    }      else {
-      _controller.hideTooltip();
-    }
+    if (_controller.value == TooltipStatus.isHidden) {
+      _controller.showTooltip(immediately: true);
+      print("%%%%%%%%%%%%%: show");
+    } else {
+      _controller.hideTooltip(immediately: true);
+      print("%%%%%%%%%%%%%: hide");
 
+    }
   }
 
   @override
