@@ -607,7 +607,19 @@ abstract class _JustTheTooltipState<T> extends State<JustTheInterface>
     Widget result;
 
     if (triggerMode == TooltipTriggerMode.manual) {
-      result = widget.child;
+      result = InkWell(
+        onTap: (){
+          if (_controller.value == TooltipStatus.isHidden) {
+            _controller.showTooltip(immediately: true);
+            print("%%%%%%%%%%%%%: show");
+          } else {
+            _controller.hideTooltip(immediately: true);
+            print("%%%%%%%%%%%%%: hide");
+
+          }
+        },
+        child: widget.child,
+      );
     } else {
       result = GestureDetector(
         behavior: HitTestBehavior.opaque,
