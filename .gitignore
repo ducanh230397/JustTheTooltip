@@ -5,3 +5,15 @@ build/unit_test_assets/AssetManifest.json
 build/unit_test_assets/FontManifest.json
 build/unit_test_assets/NOTICES.Z
 build/unit_test_assets/fonts/MaterialIcons-Regular.otf
+.packages
+pubspec.lock
+.dart_tool/package_config.json
+.dart_tool/package_config_subset
+.dart_tool/version
+.idea/.gitignore
+.idea/just_the_tooltip-0.0.11+2.iml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/libraries/Dart_Packages.xml
+.idea/libraries/Dart_SDK.xml
+.idea/libraries/Flutter_Plugins.xml

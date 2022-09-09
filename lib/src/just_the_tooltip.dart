@@ -527,9 +527,9 @@ abstract class _JustTheTooltipState<T> extends State<JustTheInterface>
     }
 
     if (event is PointerUpEvent || event is PointerCancelEvent) {
-      _hideTooltip();
-    } else if (event is PointerDownEvent) {
       _hideTooltip(immediately: true);
+    } else if (event is PointerDownEvent) {
+      // _hideTooltip(immediately: true);
     }
   }
 
@@ -572,6 +572,12 @@ abstract class _JustTheTooltipState<T> extends State<JustTheInterface>
         Feedback.forTap(context);
       }
     }
+    if(_controller.value == TooltipStatus.isHidden){
+      _controller.showTooltip();
+    }      else {
+      _controller.hideTooltip();
+    }
+
   }
 
   @override
