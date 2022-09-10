@@ -10,10 +10,10 @@ import 'package:just_the_tooltip/src/positioned_tooltip.dart';
 part 'just_the_tooltip_entry.dart';
 
 typedef ShowTooltip = Future<void> Function({
-  bool immediately,
+bool immediately,
 
-  /// If set to true, this will set the timer for the tooltip to close.
-  bool autoClose,
+/// If set to true, this will set the timer for the tooltip to close.
+bool autoClose,
 });
 
 typedef HideTooltip = Future<void> Function({bool immediately});
@@ -200,7 +200,7 @@ class _JustTheTooltipOverlayState extends _JustTheTooltipState<OverlayEntry> {
     }
 
     setState(
-      () {
+          () {
         // In the case of a modal, we enter a skrim overlay to catch taps
         if (widget.isModal) {
           entry = entryOverlay;
@@ -445,6 +445,9 @@ abstract class _JustTheTooltipState<T> extends State<JustTheInterface>
 
       _removeEntries();
       completer.complete();
+      Future<void>.delayed(Duration(milliseconds: 100))
+          .then((value) => _pressActivated = false);
+
       return future;
     }
 
@@ -456,13 +459,13 @@ abstract class _JustTheTooltipState<T> extends State<JustTheInterface>
     } else {
       _hideTimer ??= Timer(
         hoverShowDuration,
-        () async {
+            () async {
           await _animationController.reverse();
           completer.complete();
         },
       );
     }
-
+    print("hideeee 2e");
     _pressActivated = false;
 
     return future;
@@ -507,7 +510,7 @@ abstract class _JustTheTooltipState<T> extends State<JustTheInterface>
       await ensureTooltipVisible();
       completer.complete();
     });
-
+    _pressActivated = true;
     return future;
   }
 
@@ -562,9 +565,14 @@ abstract class _JustTheTooltipState<T> extends State<JustTheInterface>
   }
 
   Future<void> _handlePress() async {
-    _pressActivated = true;
-    print("%%%%%%%%%%%%%: handle");
-
+    print("%%%%%%%%%%%%%: handle ${_pressActivated}");
+    if (_pressActivated) {
+      _pressActivated = false;
+      _hideTooltip(immediately: true);
+      return;
+    } else {
+      _pressActivated = true;
+    }
     final tooltipCreated = await ensureTooltipVisible();
 
     if (tooltipCreated && enableFeedback) {
@@ -573,14 +581,6 @@ abstract class _JustTheTooltipState<T> extends State<JustTheInterface>
       } else {
         Feedback.forTap(context);
       }
-    }
-    if (_controller.value == TooltipStatus.isHidden) {
-      _controller.showTooltip(immediately: true);
-      print("%%%%%%%%%%%%%: show");
-    } else {
-      _controller.hideTooltip(immediately: true);
-      print("%%%%%%%%%%%%%: hide");
-
     }
   }
 
@@ -608,14 +608,13 @@ abstract class _JustTheTooltipState<T> extends State<JustTheInterface>
 
     if (triggerMode == TooltipTriggerMode.manual) {
       result = InkWell(
-        onTap: (){
+        onTap: () {
           if (_controller.value == TooltipStatus.isHidden) {
             _controller.showTooltip(immediately: true);
             print("%%%%%%%%%%%%%: show");
           } else {
             _controller.hideTooltip(immediately: true);
             print("%%%%%%%%%%%%%: hide");
-
           }
         },
         child: widget.child,
@@ -626,13 +625,13 @@ abstract class _JustTheTooltipState<T> extends State<JustTheInterface>
         onLongPress: widget.isModal
             ? null
             : (triggerMode == TooltipTriggerMode.longPress)
-                ? _handlePress
-                : null,
+            ? _handlePress
+            : null,
         onTap: widget.isModal
             ? _showTooltip
             : (triggerMode == TooltipTriggerMode.tap)
-                ? _handlePress
-                : null,
+            ? _handlePress
+            : null,
         excludeFromSemantics: true,
         child: widget.child,
       );
@@ -702,7 +701,7 @@ abstract class _JustTheTooltipState<T> extends State<JustTheInterface>
                       // curve: _defaultAnimateCurve,
                       // duration: _defaultAnimateDuration,
                       animatedTransitionBuilder:
-                          widget.animatedTransitionBuilder,
+                      widget.animatedTransitionBuilder,
                       child: child!,
                       margin: widget.margin,
                       targetSize: targetInformation.size,
@@ -715,7 +714,7 @@ abstract class _JustTheTooltipState<T> extends State<JustTheInterface>
                       tailLength: widget.tailLength,
                       tailBuilder: widget.tailBuilder,
                       backgroundColor:
-                          widget.backgroundColor ?? theme.cardColor,
+                      widget.backgroundColor ?? theme.cardColor,
                       textDirection: widget.textDirection,
                       shadow: widget.shadow ?? defaultShadow,
                       elevation: widget.elevation,
